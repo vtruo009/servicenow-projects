@@ -1,3 +1,5 @@
+import {CatalogTaskResponse, UserResponse} from '../types/catalogTask'
+
 declare global {
     interface Window {
         g_ck: string
@@ -12,7 +14,7 @@ export class CatalogTaskService {
     }
 
     // Return all Catalog Tasks assigned to me
-    async getMyCatalogTasks() {
+    async getMyCatalogTasks(): Promise<CatalogTaskResponse[]> {
         try {
             const userRes = await fetch('/api/now/ui/user/current_user', {
                 headers: {
@@ -26,10 +28,10 @@ export class CatalogTaskService {
                 throw new Error(errorData.error?.message || `HTTP error ${userRes.status}`)
             }
 
-            var {result: userData} = await userRes.json();
-            var searchParams = new URLSearchParams();
+            const {result: userData}: {result: UserResponse} = await userRes.json();
+            const searchParams = new URLSearchParams();
             searchParams.set('sysparm_display_value', 'all');
-            searchParams.set('sysparm_fields', 'sys_id,number,short_description,description,state,opened_at');
+            searchParams.set('sysparm_fields', 'sys_id,number,short_description,description,state,priority,assigned_to,opened_at');
             searchParams.set('sysparm_query', `assigned_to=${userData.user_sys_id}`);
 
             const response = await fetch(`/api/now/table/${this.tableName}?${searchParams.toString()}`, {
@@ -45,7 +47,7 @@ export class CatalogTaskService {
                 throw new Error(errorData.error?.message || `HTTP error ${response.status}`);
             }
 
-            const { result } = await response.json();
+            const { result }: {result: CatalogTaskResponse[]} = await response.json();
             return result || []
         } catch (error) {
             console.error('Error fetching tasks', error);
@@ -53,6 +55,3 @@ export class CatalogTaskService {
         }
     }
 }
-
-let test = new CatalogTaskService()
-test.getMyCatalogTasks();
