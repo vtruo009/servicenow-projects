@@ -1,0 +1,7 @@
+{
+    "scope": "x_2315251_req_dash",
+    "scopeId": "4550a3f147a81310cf304db3416d431f",
+    "name": "Request Fulfillment Workbench",
+    "tsconfigPath": "./src/server/tsconfig.json",
+    "packageSourceCodeOnInstance": true
+}
