@@ -1,7 +1,4 @@
-interface FieldValue {
-    value: string;
-    display_value: string;
-}
+import { FieldValue } from './FieldValue';
 
 export interface CatalogTaskResponse {
     description: FieldValue;
@@ -12,6 +9,7 @@ export interface CatalogTaskResponse {
     sys_id: FieldValue;
     assigned_to: FieldValue;
     priority: FieldValue;
+    request_item: FieldValue;
 }
 
 export interface UserResponse {

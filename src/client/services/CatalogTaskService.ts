@@ -1,4 +1,4 @@
-import {CatalogTaskResponse, UserResponse} from '../types/catalogTask'
+import { CatalogTaskResponse, UserResponse } from '../types/catalogTask'
 
 declare global {
     interface Window {
@@ -28,10 +28,10 @@ export class CatalogTaskService {
                 throw new Error(errorData.error?.message || `HTTP error ${userRes.status}`)
             }
 
-            const {result: userData}: {result: UserResponse} = await userRes.json();
+            const { result: userData }: { result: UserResponse } = await userRes.json();
             const searchParams = new URLSearchParams();
             searchParams.set('sysparm_display_value', 'all');
-            searchParams.set('sysparm_fields', 'sys_id,number,short_description,description,state,priority,assigned_to,opened_at');
+            searchParams.set('sysparm_fields', 'sys_id,number,short_description,description,state,priority,assigned_to,opened_at,request_item');
             searchParams.set('sysparm_query', `assigned_to=${userData.user_sys_id}`);
 
             const response = await fetch(`/api/now/table/${this.tableName}?${searchParams.toString()}`, {
@@ -47,7 +47,7 @@ export class CatalogTaskService {
                 throw new Error(errorData.error?.message || `HTTP error ${response.status}`);
             }
 
-            const { result }: {result: CatalogTaskResponse[]} = await response.json();
+            const { result }: { result: CatalogTaskResponse[] } = await response.json();
             return result || []
         } catch (error) {
             console.error('Error fetching tasks', error);
